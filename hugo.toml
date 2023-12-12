@@ -1,0 +1,4 @@
+baseURL = 'https://cs1660zp.org/'
+languageCode = 'en-us'
+title = 'cs1660 final project'
+theme = 'ananke'
