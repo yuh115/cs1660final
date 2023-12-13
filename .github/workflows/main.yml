@@ -16,69 +16,24 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2  # This step checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+      uses: actions/checkout@v2  # Checks-out your repository
 
     - name: Set up Hugo
-      uses: peaceiris/actions-hugo@v2  # This action sets up a Hugo environment for use in actions by downloading a version of Hugo binary and adding to PATH
+      uses: peaceiris/actions-hugo@v2  # Sets up Hugo environment
       with:
         hugo-version: '0.121.1'  # Replace with the version of Hugo you want to use
 
     - name: Build
-      run: hugo --minify  # Runs a set of commands using the runners shell
+      run: hugo --minify  # Runs Hugo build command
 
     - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1  # This action configures the Google Cloud authentication in a workflow.
+      uses: google-github-actions/auth@v1  # Authenticates to Google Cloud
       with:
-        workload_identity_provider: 'projects/712238927167/locations/global/workloadIdentityPools/1660pl/providers/github-cs1660'  # Replace with your workload identity provider
-        service_account: 'cs1660fl@web1-363623.iam.gserviceaccount.com'  # Replace with your service account email
+        workload_identity_provider: 'projects/712238927167/locations/global/workloadIdentityPools/1660pl/providers/github-cs1660'
+        service_account: 'cs1660fl@web1-363623.iam.gserviceaccount.com'  # Use your new service account email
 
     - name: Upload to Google Cloud Storage
-      uses: google-github-actions/upload-cloud-storage@v1  # This action uploads files/folders to a Google Cloud Storage (GCS) bucket.
+      uses: google-github-actions/upload-cloud-storage@v1  # Uploads files to GCS
       with:
-        path: public  # The path in your repository to upload from
-        destination: gs://cs1660final  # The destination bucket and optional path to upload to
-
-# name: Static Site
-
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-
-# permissions:
-#   contents: read
-#   id-token: write
-
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-22.04
-#     concurrency:
-#       group: ${{ github.workflow }}-${{ github.ref }}
-#     steps:
-#       - uses: actions/checkout@v4
-#         with:
-#           submodules: true
-#           fetch-depth: 0
-
-#       - name: Setup Hugo
-#         uses: peaceiris/actions-hugo@v2
-#         with:
-#           hugo-version: '0.121.1'
-
-#       - name: Build
-#         run: hugo --minify
-
-#       - id: 'auth'
-#         name: 'Authenticate to Google Cloud'
-#         uses: 'google-github-actions/auth@v1'
-#         with:
-#           workload_identity_provider: 'principal://iam.googleapis.com/projects/712238927167/locations/global/workloadIdentityPools/1660pl'  # 使用你的工作负载身份池ID
-#           service_account: 'cs1660fl@web1-363623.iam.gserviceaccount.com'
-
-#       - id: 'upload-static-files'
-#         uses: 'google-github-actions/upload-cloud-storage@v1'
-#         with:
-#           path: 'public'
-#           destination: 'cs1660final'
-#           parent: false
+        path: public  # The path to the build directory
+        destination: gs://cs1660final  # The GCS bucket
